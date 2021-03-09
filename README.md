@@ -1,9 +1,8 @@
 Beeline
 =======
 
-Elgato is a command line tool to control your Elgato [Key
-Lights](https://www.elgato.com/en/gaming/key-light) and [Key Light
-Airs](https://www.elgato.com/en/gaming/key-light-air)
+Elgato is a command line tool to control your Elgato [Key Lights](https://www.elgato.com/en/gaming/key-light) and 
+[Key Light Airs](https://www.elgato.com/en/gaming/key-light-air)
 
 Usage
 -----
@@ -23,6 +22,21 @@ Commands:
   settings  Show the current light settings
   setup     Set-up the key light
 ```
+
+## Install
+
+**Mac OS**
+
+```
+$ brew install aitorvs/repo/elgato
+```
+
+**Other**
+
+Download standalone JAR from
+[latest release](https://github.com/aitorvs/elgato/releases/latest).
+On MacOS and Linux you can `chmod +x` and execute the `.jar` directly.
+On Windows use `java -jar`.
 
 License
 -------
