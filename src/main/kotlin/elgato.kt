@@ -5,9 +5,6 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.versionOption
 import com.github.ajalt.clikt.parameters.types.int
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.request.*
 import kotlinx.coroutines.runBlocking
 
 fun main(args: Array<String>) {
@@ -35,48 +32,25 @@ private class OnCommand : CliktCommand(name = "on", help = "Turn ON the light") 
   ).int()
 
   override fun run() {
-    // {"lights":[{"brightness":10,"temperature":162,"on":1}],"numberOfLights":1}
-    val status = runBlocking {
-      HttpClient(CIO).use { client ->
-        client.put<Unit>("http://${ElGato.address}:${ElGato.port}/elgato/lights") {
-          header("Content-Type", "application/json")
-          body = "{\"lights\":[{\"on\":1}],\"numberOfLights\":1}"
-        }
-      }
-    }
+    runBlocking { client.turnOn() }
   }
 }
 
 private class OffCommand : CliktCommand(name = "off", help = "Turn OFF the light") {
   override fun run() {
-    val status = runBlocking {
-      HttpClient(CIO).use { client ->
-        client.put<Unit>("http://${ElGato.address}:${ElGato.port}/elgato/lights") {
-          header("Content-Type", "application/json")
-          body = "{\"lights\":[{\"on\":0}],\"numberOfLights\":1}"
-        }
-      }
-    }
+    runBlocking { client.turnOff() }
   }
 }
 
 private class InfoCommand : CliktCommand(name = "info", help = "Show key light info") {
   override fun run() {
-    val response = runBlocking {
-      HttpClient(CIO).use { client ->
-        client.get<String>("http://${ElGato.address}:${ElGato.port}/elgato/accessory-info")
-      }
-    }.also { println(it) }
+    runBlocking { client.fetchInfo() }.also { println(it) }
   }
 }
 
 private class SettingsCommand : CliktCommand(name = "settings", help = "Show the current light settings") {
   override fun run() {
-    val response = runBlocking {
-      HttpClient(CIO).use { client ->
-        client.get<String>("http://${ElGato.address}:${ElGato.port}/elgato/lights/settings")
-      }
-    }.also { println(it) }
+    runBlocking { client.fetchSettings() }.also { println(it) }
   }
 }
 
@@ -91,7 +65,7 @@ private class SetupCommand : CliktCommand(name = "setup", help = "Set-up the key
   ).int()
 
   override fun run() {
-    println("INFO")
+    println("[Coming soon...]")
   }
 }
 
