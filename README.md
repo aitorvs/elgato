@@ -23,6 +23,17 @@ Commands:
   setup     Set-up the key light
 ```
 
+## Setup
+
+For now only one light is supported and the `setup` is done manually. For that, create a `/usr/local/etc/elgato.properties`
+and add the following configuration to it
+
+```bash
+$ cat /usr/local/etc/elgato.properties
+elgato.host= # Your key light IP address
+elgato.port=9123 # don't need to change the port as 9123 is the default one
+```
+
 ## Install
 
 **Mac OS**
