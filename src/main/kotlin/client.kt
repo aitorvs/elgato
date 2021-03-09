@@ -1,19 +1,32 @@
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
+import io.ktor.client.features.json.*
+import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
+import model.Info
+import model.Settings
+
+
+private fun httpClient(): HttpClient {
+  return HttpClient(CIO) {
+    install(JsonFeature) {
+      serializer = KotlinxSerializer()
+    }
+  }
+}
 
 @Suppress("ClassName")
 class client {
 
   companion object {
-    private suspend fun httpGet(path: String): String {
-      return HttpClient(CIO).use { client ->
+    private suspend inline fun <reified T> httpGet(path: String): T {
+      return httpClient().use { client ->
         client.get("http://${ElGato.address}:${ElGato.port}/$path")
       }
     }
 
     private suspend fun httpPut(path: String, body: String? = null) {
-      HttpClient(CIO).use { client ->
+      return httpClient().use { client ->
         client.put<Unit>("http://${ElGato.address}:${ElGato.port}/$path") {
 //          header("Content-Type", "application/json")
           body?.let { this.body = it }
@@ -21,12 +34,12 @@ class client {
       }
     }
 
-    suspend fun fetchSettings(): String {
-      return httpGet("elgato/lights/settings")
+    suspend fun fetchSettings(): Settings {
+      return httpGet<Settings>("elgato/lights/settings")
     }
 
-    suspend fun fetchInfo(): String {
-      return httpGet("elgato/accessory-info")
+    suspend fun fetchInfo(): Info {
+      return httpGet<Info>("elgato/accessory-info")
     }
 
     // {"lights":[{"brightness":10,"temperature":162,"on":1}],"numberOfLights":1}

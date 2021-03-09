@@ -1,7 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.4.10"
+    kotlin("jvm") version "1.4.30"
+    kotlin("plugin.serialization") version "1.4.30"
 }
 
 group = "com.aitorvs.elgato"
@@ -17,6 +18,7 @@ dependencies {
     implementation("com.github.ajalt.clikt:clikt:3.1.0")
     implementation("com.github.ajalt.mordant:mordant:2.0.0-alpha2")
     implementation("io.ktor:ktor-client-cio:1.5.2")
+    implementation("io.ktor:ktor-client-serialization:1.5.2")
     implementation("com.natpryce:konfig:1.6.10.0")
 }
 
