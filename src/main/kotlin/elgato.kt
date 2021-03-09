@@ -12,13 +12,21 @@ fun main(args: Array<String>) {
   NoOpCliktCommand(name = "elgato")
     .versionOption(version)
     .subcommands(
-      OnCommand(),
-      OffCommand(),
+      SwitchCommand(),
       InfoCommand(),
       SettingsCommand(),
       SetupCommand(),
     )
     .main(args)
+}
+
+private class SwitchCommand : NoOpCliktCommand(name = "switch", help = "Control light switches") {
+  init {
+    subcommands(
+      OnCommand(),
+      OffCommand(),
+    )
+  }
 }
 
 private class OnCommand : CliktCommand(name = "on", help = "Turn ON the light") {
