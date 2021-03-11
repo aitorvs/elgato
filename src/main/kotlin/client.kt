@@ -4,6 +4,8 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
 import model.Info
+import model.LightValues
+import model.Light
 import model.Settings
 
 
@@ -25,10 +27,10 @@ class client {
       }
     }
 
-    private suspend fun httpPut(path: String, body: String? = null) {
+    private suspend inline fun <reified T> httpPut(path: String, body: T? = null) {
       return httpClient().use { client ->
         client.put<Unit>("http://${ElGato.address}:${ElGato.port}/$path") {
-//          header("Content-Type", "application/json")
+          header("Content-Type", "application/json")
           body?.let { this.body = it }
         }
       }
@@ -38,19 +40,32 @@ class client {
       return httpGet<Settings>("elgato/lights/settings")
     }
 
+    suspend fun fetchValues(): LightValues {
+      return httpGet("elgato/lights")
+    }
+
     suspend fun fetchInfo(): Info {
       return httpGet<Info>("elgato/accessory-info")
     }
 
-    // {"lights":[{"brightness":10,"temperature":162,"on":1}],"numberOfLights":1}
-    suspend fun turnOn(){
-      val body = "{\"lights\":[{\"on\":1}],\"numberOfLights\":1}"
-      return httpPut("elgato/lights", body)
+    suspend fun sendValues(values: LightValues) {
+      return httpPut("elgato/lights", values)
     }
 
-    suspend fun turnOff(){
-      val body = "{\"lights\":[{\"on\":0}],\"numberOfLights\":1}"
-      return httpPut("elgato/lights", body)
+    suspend fun turnOn(){
+      val body = LightValues(
+        numberOfLights = 1,
+        lights = listOf(Light(on = 1))
+      )
+      return sendValues(body)
+    }
+
+    suspend fun turnOff() {
+      val body = LightValues(
+        numberOfLights = 1,
+        lights = listOf(Light(on = 0))
+      )
+      return sendValues(body)
     }
   }
 }
