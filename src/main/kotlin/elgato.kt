@@ -39,7 +39,7 @@ private class AdjustCommand : NoOpCliktCommand(name = "adjust", help = "Control 
       runBlocking { client.fetchValues() }.also { values ->
         val lights = values.lights.toMutableList().map { light ->
           val delta = if (command == Command.increase) 10 else -10
-          val newBrightness = max(143, min(100, (light.brightness ?: 0) + delta))
+          val newBrightness = max(3, min(100, (light.brightness ?: 0) + delta))
           light.copy(brightness = newBrightness)
         }
         runBlocking { client.sendValues(values.copy(lights = lights)) }
