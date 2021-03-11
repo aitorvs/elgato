@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.aitorvs.elgato"
-version = "0.2.3"
+version = "0.3.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
